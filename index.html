@@ -22,7 +22,6 @@
             scroll-behavior: smooth;
         }
 
-        /* As cores serão sobrescritas pelo JavaScript baseado na variável abaixo */
         :root {
             --green-primary: #99CD85;
             --green-secondary: #CFE0BC;
@@ -227,7 +226,7 @@
             display: inline-block;
         }
 
-        .sobre-box, .contato-box, .viabilidade-box {
+        .sobre-box, .contato-box {
             background: white;
             border-radius: 2rem;
             padding: 2rem;
@@ -275,6 +274,36 @@
             text-align: center;
         }
 
+        /* Estilos dos filtros */
+        .filtros-catalogo {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0 1rem;
+        }
+        .filtro-btn {
+            background: #eef3ea;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+            color: #2d4a26;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        .filtro-btn.active-filtro {
+            background: var(--green-primary);
+            color: #1e3a1a;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .produto-item {
+            transition: 0.2s;
+        }
+        .produto-item.ocultar {
+            display: none;
+        }
+
         @media (max-width: 760px) {
             .navbar {
                 flex-direction: column;
@@ -295,88 +324,51 @@
 
 <script>
     // ============================================================
-    // 🎨 ÁREA DE PERSONALIZAÇÃO - ALTERE AQUI TUDO QUE QUISER!
+    // 🎨 CONFIGURAÇÕES - EDITAR CONFORME NECESSÁRIO
     // ============================================================
     const CONFIG = {
-        // DADOS DA LOJA
         nomeLoja: "TriceraCookies",
         lema: "Crocância que atravessa eras",
         email: "TriceraCookiesOFC@gmail.com",
-        telefone: "(47) 4002-8922",
-        endereco: "Rua dos Fósseis, 217 - Vila Dinossauro, Balneário Camboriú",
-        horario: "Terça a Sábado, das 8h às 18h",
+        telefone: "(11) 98765-4321",
+        endereco: "Av. Paulista, 1000 - Bela Vista, São Paulo - SP",
+        horario: "Terça a Sábado, das 9h às 19h (Atendimento exclusivamente presencial)",
         
-        // CORES (altere os hexadecimais)
         cores: {
             principal: "#99CD85",
             secundaria: "#CFE0BC",
             escura: "#5f8b4a"
         },
         
-        // IMAGENS (coloque URLs reais ou mantenha os placeholders)
+        // URLs das imagens (Google Drive - convertidas para link direto)
+        // Usei o link direto do Google Drive: precisa ser no formato que permita visualização
+        // Se não carregar, substitua pelos links fornecidos. Coloquei os IDs extraídos
         imagens: {
-            bannerHome: "https://placehold.co/1200x500/CFE0BC/3a5e2f?text=🍪+Nossos+Cookies+Jurássicos+🍪",
-            sobreLoja: "https://placehold.co/1000x400/99CD85/ffffff?text=👩‍🍳+Nossa+Cozinha+Criativa",
-            produto1: "https://placehold.co/500x400/e9f2e3/5f8b4a?text=🦕+Cookie+Simples",
-            produto2: "https://placehold.co/500x400/FFE0B5/A5652A?text=🍫+Cookie+Chocolate",
-            produto3: "https://placehold.co/500x400/F9F0D4/E3B87C?text=🦴+Glacê+Jurássico",
-            produto4: "https://placehold.co/500x400/D8E6C9/58853E?text=🥜+Amendo-Dino"
+            bannerHome: "https://drive.google.com/uc?export=view&id=1IEt1yyM3oilWlerY4tQQ1BqyaUeKlV_P",
+            sobreLoja: "https://drive.google.com/uc?export=view&id=1HI8F5SN6IXGS5Szq6Gy-B8wJ1dTn6i4N", 
+            produto1_simples: "https://drive.google.com/uc?export=view&id=1Yr3E9u9MIkLup0NKpEXHqnB0Xd98N0",
+            produto2_simples: "https://drive.google.com/uc?export=view&id=1kNVuJTAYTh6yfBgPTVdeiWWTzVle7iRe",
+            produto3_simples: "https://drive.google.com/uc?export=view&id=19_2ySI0m3zTJ3AiFnbic9CdgYNei2RXY",
+            produto1_confeitado: "https://drive.google.com/uc?export=view&id=1XbZoMKz7uLOmuBly-2oLpJpgjYvYhGYw",
+            produto2_confeitado: "https://drive.google.com/uc?export=view&id=1RAmsharP3cBC0lT43OJPy_NHY2koC6jG",
+            produto3_confeitado: "https://drive.google.com/uc?export=view&id=1Ckpvo6HaxROnS_GjDGxZ5LKiqaHSvaO1"
         },
         
-        // LISTA DE BISCOITOS (adicione, remova ou edite à vontade)
         produtos: [
-            {
-                nome: "Cookie Dino Original",
-                descricao: "Manteiga, gotas de baunilha e formato de tricerátops. Crocância perfeita.",
-                preco: 2.00,
-                tipo: "simples",
-                imagem: null // usa a imagem do config.imagens.produto1
-            },
-            {
-                nome: "Cookie Rex de Chocolate",
-                descricao: "Cobertura de chocolate belga + granulado dino. Irresistível!",
-                preco: 5.00,
-                tipo: "confeitado",
-                imagem: null // usa produto2
-            },
-            {
-                nome: "Cookie Glacê Jurássico",
-                descricao: "Glacê colorido com estampa de pegadas. Sabor limão e baunilha.",
-                preco: 5.00,
-                tipo: "confeitado",
-                imagem: null // usa produto3
-            },
-            {
-                nome: "Cookie Amendo-Dino",
-                descricao: "Croûnch de amendoim pedaços, versão vegana opcional.",
-                preco: 2.00,
-                tipo: "simples",
-                imagem: null // usa produto4
-            }
-            // Adicione mais produtos aqui seguindo o mesmo formato
+            { nome: "Cookie Dino Original", descricao: "Manteiga, baunilha e formato de tricerátops.", preco: 2.00, tipo: "simples", imagemKey: "produto1_simples" },
+            { nome: "Cookie Simples 2", descricao: "Biscoito amanteigado com gotas de mel.", preco: 2.00, tipo: "simples", imagemKey: "produto2_simples" },
+            { nome: "Cookie Simples 3", descricao: "Tradicional com raspas de limão siciliano.", preco: 2.00, tipo: "simples", imagemKey: "produto3_simples" },
+            { nome: "Cookie Rex Chocolate", descricao: "Cobertura de chocolate belga e granulado dino.", preco: 5.00, tipo: "confeitado", imagemKey: "produto1_confeitado" },
+            { nome: "Cookie Glacê Jurássico", descricao: "Glacê colorido com estampa de pegadas.", preco: 5.00, tipo: "confeitado", imagemKey: "produto2_confeitado" },
+            { nome: "Cookie Confeitado 3", descricao: "Chocolate branco com confeitos de dinossauro.", preco: 5.00, tipo: "confeitado", imagemKey: "produto3_confeitado" }
         ],
         
-        // TEXTO DA HISTÓRIA
         historia: "🦕 Uma garota apaixonada por dinossauros e culinária decidiu transformar suas duas paixões em um sonho. Depois de testar várias receitas em casa, ela criou uma loja de biscoitos em formatos de dinossauros, cheia de cores e diversão. Assim nasceu uma lojinha diferente, onde cada biscoito traz um sabor delicioso e um toque da era jurássica. Hoje, nossa cozinha artesanal produz cookies que unem nostalgia e crocância, com ingredientes selecionados e muito amor. Cada mordida é uma aventura no tempo!",
         
-        // DADOS DE VIABILIDADE
-        viabilidade: {
-            custoMinimo: 0.38,
-            custoMaximo: 0.83,
-            investimentoInicial: 4000,
-            riscoTexto: "O maior gasto não é o biscoito em si, mas sim o aluguel da loja e a conta de luz (por causa do forno).",
-            acaoGerada: "Para maximizar o lucro real, a loja deve vender mais biscoitos confeitados (R$ 5), pois o custo adicional do chocolate é pequeno, mas o preço sobe muito."
-        },
-        
-        // TEXTO DO FOOTER
         footerTexto: "Biscoitos artesanais com alma pré-histórica"
     };
     
-    // ============================================================
-    // 🚀 FIM DA ÁREA DE PERSONALIZAÇÃO - NÃO MEXA DAQUI PRA BAIXO
-    // ============================================================
-    
-    // Aplicar cores dinâmicas via CSS
+    // Aplicar cores
     function aplicarCores() {
         const root = document.documentElement.style;
         root.setProperty('--green-primary', CONFIG.cores.principal);
@@ -384,34 +376,40 @@
         root.setProperty('--green-dark', CONFIG.cores.escura);
     }
     
-    // Renderizar o HTML completo
+    // Helper para pegar URL da imagem
+    function getImagemUrl(imagemKey) {
+        return CONFIG.imagens[imagemKey] || "https://placehold.co/500x400/CFE0BC/3a5e2f?text=🍪+Cookie";
+    }
+    
+    // Renderizar HTML completo
     function renderizarSite() {
         const app = document.getElementById('app');
         
-        // Gerar HTML dos produtos dinamicamente
-        const produtosHTML = CONFIG.produtos.map((prod, index) => {
-            let imagemUrl = prod.imagem;
-            if (!imagemUrl) {
-                const imgKeys = ['produto1', 'produto2', 'produto3', 'produto4'];
-                imagemUrl = CONFIG.imagens[imgKeys[index] || 'produto1'];
-            }
-            const badgeText = prod.tipo === 'confeitado' ? '✨ Confeitado R$' + prod.preco : '🍪 Simples R$' + prod.preco;
-            return `
-                <div class="card">
-                    <div class="card-img" style="background-image: url('${imagemUrl}');">
-                        <span class="badge-img">${badgeText}</span>
-                    </div>
-                    <div class="card-content">
-                        <h3>${prod.nome}</h3>
-                        <p>${prod.descricao}</p>
-                        <div class="price">R$ ${prod.preco.toFixed(2)} <span style="font-size:0.9rem;">unidade</span></div>
-                    </div>
-                </div>
-            `;
-        }).join('');
+        // Gerar produtos com suas imagens corretas
+        const produtosSimpless = CONFIG.produtos.filter(p => p.tipo === 'simples');
+        const produtosConfeitados = CONFIG.produtos.filter(p => p.tipo === 'confeitado');
         
-        const margemSimples = ((2 - 0.45) / 0.45 * 100).toFixed(0);
-        const margemConfeitado = ((5 - 0.65) / 0.65 * 100).toFixed(0);
+        // Função para gerar os cards de um array de produtos
+        function gerarCards(produtosArray) {
+            return produtosArray.map(prod => {
+                const imagemUrl = getImagemUrl(prod.imagemKey);
+                const badgeText = prod.tipo === 'confeitado' ? '✨ Confeitado' : '🍪 Simples';
+                return `
+                    <div class="card produto-item" data-tipo="${prod.tipo}">
+                        <div class="card-img" style="background-image: url('${imagemUrl}');">
+                            <span class="badge-img">${badgeText}</span>
+                        </div>
+                        <div class="card-content">
+                            <h3>${prod.nome}</h3>
+                            <p>${prod.descricao}</p>
+                            <div class="price">R$ ${prod.preco.toFixed(2)} <span style="font-size:0.9rem;">unidade</span></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        const todosProdutosHTML = gerarCards(CONFIG.produtos);
         
         const htmlCompleto = `
             <header>
@@ -425,7 +423,6 @@
                         <a data-section="produtos">Produtos / Catálogo</a>
                         <a data-section="sobre">Sobre a loja</a>
                         <a data-section="contato">Contato</a>
-                        <a data-section="outras">Outras + Viabilidade</a>
                     </div>
                 </div>
             </header>
@@ -437,7 +434,7 @@
                         <h1>Biscoitos jurássicos artesanais 🦖🍪</h1>
                         <p>${CONFIG.lema}</p>
                         <button class="btn-cookie" id="explorarBtn">Explorar catálogo →</button>
-                        <div class="hero-img" style="background-image: url('${CONFIG.imagens.bannerHome}');"></div>
+                        <div class="hero-img" style="background-image: url('${getImagemUrl('bannerHome')}');"></div>
                         <div class="dica-imagem" style="margin-top: 12px;">
                             <i class="fas fa-camera"></i> Cookies fresquinhos saindo do forno!
                         </div>
@@ -460,17 +457,25 @@
                         </div>
                     </div>
                     <div style="margin-top: 2rem; text-align: center; background: #fff2e0; border-radius: 3rem; padding: 1rem;">
-                        <i class="fas fa-store"></i> Atendimento presencial & delivery • ${CONFIG.horario}
+                        <i class="fas fa-store"></i> ${CONFIG.horario} • <strong>${CONFIG.endereco}</strong>
                     </div>
                 </div>
 
-                <!-- PRODUTOS -->
+                <!-- PRODUTOS COM FILTROS -->
                 <div id="produtos" class="section">
                     <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">🍪 Nosso catálogo</h2>
                     <p>Biscoitos fresquinhos, feitos com carinho e formatos pré-históricos.</p>
-                    <div class="grid-produtos">
-                        ${produtosHTML}
+                    
+                    <div class="filtros-catalogo">
+                        <button class="filtro-btn active-filtro" data-filtro="todos">Todos os cookies</button>
+                        <button class="filtro-btn" data-filtro="simples">🍪 Apenas Simples</button>
+                        <button class="filtro-btn" data-filtro="confeitado">🎨 Apenas Confeitados</button>
                     </div>
+                    
+                    <div class="grid-produtos" id="produtosGrid">
+                        ${todosProdutosHTML}
+                    </div>
+                    
                     <div class="sobre-box" style="background:#f5f7ef;">
                         <p><strong>💡 Dica da chef:</strong> nossos biscoitos <strong>confeitados (R$ 5,00)</strong> têm o melhor custo-benefício. Peça um mix e ganhe brinde surpresa!</p>
                     </div>
@@ -480,7 +485,7 @@
                 <div id="sobre" class="section">
                     <div class="sobre-box">
                         <h2><i class="fas fa-dragon"></i> A história da ${CONFIG.nomeLoja}</h2>
-                        <div class="sobre-imagem" style="background-image: url('${CONFIG.imagens.sobreLoja}');"></div>
+                        <div class="sobre-imagem" style="background-image: url('${getImagemUrl('sobreLoja')}');"></div>
                         <p style="font-size:1.1rem; margin-top: 1rem;">${CONFIG.historia}</p>
                         <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
                             <div><i class="fas fa-leaf"></i> Ingredientes naturais</div>
@@ -489,7 +494,8 @@
                         </div>
                     </div>
                     <div class="horario">
-                        <i class="far fa-clock"></i> Horário de atendimento: <strong>${CONFIG.horario}</strong> • Delivery e retirada.
+                        <i class="far fa-clock"></i> Horário de atendimento: <strong>${CONFIG.horario}</strong><br>
+                        <i class="fas fa-map-marker-alt"></i> Local: ${CONFIG.endereco}
                     </div>
                 </div>
 
@@ -500,45 +506,11 @@
                         <div class="info-contato" style="margin: 2rem 0; display: flex; flex-direction: column; gap: 1.2rem;">
                             <div><i class="fas fa-envelope"></i> <strong>Email:</strong> <a href="mailto:${CONFIG.email}" style="color:#2d6a2b;">${CONFIG.email}</a></div>
                             <div><i class="fas fa-phone-alt"></i> <strong>Telefone / WhatsApp:</strong> ${CONFIG.telefone}</div>
-                            <div><i class="fas fa-map-marker-alt"></i> <strong>Localização:</strong> ${CONFIG.endereco}</div>
+                            <div><i class="fas fa-map-marker-alt"></i> <strong>Localização (presencial):</strong> ${CONFIG.endereco}</div>
                         </div>
                         <div style="background:#e1f0d4; border-radius: 1.5rem; padding: 1rem; text-align:center;">
-                            <i class="fas fa-image"></i> Visite nossa loja e veja os cookies decorados ao vivo!
+                            <i class="fas fa-store"></i> Atendimento exclusivamente presencial! Venha nos visitar.
                         </div>
-                    </div>
-                </div>
-
-                <!-- OUTRAS + VIABILIDADE -->
-                <div id="outras" class="section">
-                    <div class="viabilidade-box">
-                        <h2><i class="fas fa-chart-line"></i> Viabilidade & Estratégia ${CONFIG.nomeLoja}</h2>
-                        <div style="background: #fbf9e8; border-radius: 1.5rem; padding: 1.5rem; margin: 1rem 0;">
-                            <p><strong>💰 Lucratividade real:</strong> A venda de biscoitos é extremamente lucrativa. O custo para fazer um biscoito varia entre <strong>R$ ${CONFIG.viabilidade.custoMinimo.toFixed(2)} e R$ ${CONFIG.viabilidade.custoMaximo.toFixed(2)}</strong>. Nosso preço de venda é <strong>R$ 2 (simples)</strong> e <strong>R$ 5 (confeitado)</strong>, garantindo margem acima de <strong>500%</strong>!</p>
-                            <p><strong>🏭 Investimento inicial:</strong> Cerca de <strong>R$ ${CONFIG.viabilidade.investimentoInicial.toFixed(2)}</strong> para adquirir forno profissional e batedeira planetária.</p>
-                            <p><strong>⚠️ Risco principal:</strong> ${CONFIG.viabilidade.riscoTexto}</p>
-                            <p><strong>📈 Ação otimizada:</strong> ${CONFIG.viabilidade.acaoGerada}</p>
-                        </div>
-                        <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: space-between;">
-                            <div style="flex:1; background: var(--green-secondary); border-radius: 1.5rem; padding: 1.2rem;">
-                                <h3>🍪 Preço simples</h3>
-                                <p><strong>R$ 2,00 / unidade</strong><br>Custo ~R$0,45 · Lucro ~${margemSimples}%</p>
-                            </div>
-                            <div style="flex:1; background: var(--green-primary); border-radius: 1.5rem; padding: 1.2rem;">
-                                <h3>🎨 Preço confeitado</h3>
-                                <p><strong>R$ 5,00 / unidade</strong><br>Custo ~R$0,65 · Lucro ~${margemConfeitado}%</p>
-                                <span class="badge" style="background:#fff0b5;">⭐ MAIS RECOMENDADO</span>
-                            </div>
-                            <div style="flex:1; background: #FFE8C5; border-radius: 1.5rem; padding: 1.2rem;">
-                                <h3>📦 Kits promocionais</h3>
-                                <p>6 unidades simples + 4 confeitados = R$ 28,00</p>
-                            </div>
-                        </div>
-                        <div style="margin-top: 2rem; padding: 1rem; border-left: 5px solid var(--green-primary); background:#eef5ea;">
-                            <strong>✅ Conclusão/Resumo:</strong> Negócio viável, margem altíssima. Foco em confeitados e controle de aluguel/energia. Com investimento inicial de R$ ${CONFIG.viabilidade.investimentoInicial} e preços acessíveis, o retorno financeiro é rápido.
-                        </div>
-                    </div>
-                    <div class="horario" style="margin-top: 1rem;">
-                        <i class="fas fa-donate"></i> Faça seus pedidos pelo nosso contato e ajude a gente a manter a tradição jurássica viva! 🦕🦖
                     </div>
                 </div>
             </main>
@@ -551,19 +523,18 @@
         `;
         
         app.innerHTML = htmlCompleto;
-        
-        // Reaplicar eventos após renderizar
         aplicarCores();
         configurarNavegacao();
+        configurarFiltros();   // nova função para filtros do catálogo
     }
     
+    // Configurar navegação entre abas
     function configurarNavegacao() {
         const divSections = {
             home: document.getElementById('home'),
             produtos: document.getElementById('produtos'),
             sobre: document.getElementById('sobre'),
-            contato: document.getElementById('contato'),
-            outras: document.getElementById('outras')
+            contato: document.getElementById('contato')
         };
         const navLinks = document.querySelectorAll('.nav-links a');
         
@@ -593,13 +564,51 @@
             explorarBtn.addEventListener('click', () => activateSection('produtos'));
         }
         
-        // Ativar home por padrão
         if (!document.querySelector('.section.active-section')) {
             activateSection('home');
         }
     }
     
-    // Inicializar o site
+    // Configurar filtro de cookies
+    function configurarFiltros() {
+        const botoesFiltro = document.querySelectorAll('.filtro-btn');
+        const todosProdutos = document.querySelectorAll('.produto-item');
+        
+        if (!botoesFiltro.length) return;
+        
+        function filtrarProdutos(tipo) {
+            todosProdutos.forEach(produto => {
+                if (tipo === 'todos') {
+                    produto.classList.remove('ocultar');
+                } else {
+                    const tipoProduto = produto.getAttribute('data-tipo');
+                    if (tipoProduto === tipo) {
+                        produto.classList.remove('ocultar');
+                    } else {
+                        produto.classList.add('ocultar');
+                    }
+                }
+            });
+            
+            // Atualizar estilo dos botões
+            botoesFiltro.forEach(btn => {
+                if (btn.getAttribute('data-filtro') === tipo) {
+                    btn.classList.add('active-filtro');
+                } else {
+                    btn.classList.remove('active-filtro');
+                }
+            });
+        }
+        
+        botoesFiltro.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const filtro = btn.getAttribute('data-filtro');
+                if (filtro) filtrarProdutos(filtro);
+            });
+        });
+    }
+    
+    // Inicializar
     renderizarSite();
 </script>
 
