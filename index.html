@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>TriceraCookies | Crocância que atravessa eras</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Patrick+Hand&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fafaf5;
+            color: #2d3e2b;
+            scroll-behavior: smooth;
+        }
+
+        /* As cores serão sobrescritas pelo JavaScript baseado na variável abaixo */
+        :root {
+            --green-primary: #99CD85;
+            --green-secondary: #CFE0BC;
+            --green-dark: #5f8b4a;
+            --shadow-sm: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 20px 25px -12px rgba(0, 0, 0, 0.08);
+        }
+
+        .navbar {
+            background: white;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            padding: 0.8rem 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-family: 'Patrick Hand', cursive;
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--green-primary);
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 0 #e2f0da;
+        }
+
+        .lema {
+            font-size: 0.8rem;
+            background: var(--green-secondary);
+            padding: 0.2rem 0.8rem;
+            border-radius: 40px;
+            font-weight: 500;
+            color: #3b5a2e;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.8rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 600;
+            color: #3c5436;
+            transition: 0.2s;
+            font-size: 0.95rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .nav-links a:hover, .nav-links .active {
+            color: #2a7a2e;
+            border-bottom: 2px solid var(--green-primary);
+            padding-bottom: 4px;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .section.active-section {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--green-secondary) 0%, #ddecd0 100%);
+            border-radius: 2.5rem;
+            padding: 3rem 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #2a5730;
+        }
+
+        .btn-cookie {
+            background: var(--green-primary);
+            border: none;
+            border-radius: 60px;
+            padding: 0.7rem 1.8rem;
+            font-weight: 600;
+            color: #1e3a1a;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 1rem;
+            display: inline-block;
+        }
+
+        .btn-cookie:hover {
+            background: #7db868;
+            transform: scale(0.97);
+        }
+
+        .img-placeholder {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .hero-img {
+            width: 100%;
+            height: 240px;
+            margin-top: 1.5rem;
+            background-size: cover;
+            background-position: center 30%;
+            border-radius: 2rem;
+        }
+
+        .grid-produtos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 2rem;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.25s;
+            border: 1px solid #e9f3e3;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-img {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-start;
+            padding: 0.8rem;
+        }
+
+        .badge-img {
+            background: rgba(255,255,220,0.9);
+            backdrop-filter: blur(4px);
+            border-radius: 40px;
+            padding: 0.2rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #2c4d1e;
+        }
+
+        .card-content {
+            padding: 1.4rem;
+        }
+
+        .price {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: #2f6b2f;
+            margin: 0.5rem 0;
+        }
+
+        .badge {
+            background: var(--green-secondary);
+            border-radius: 30px;
+            padding: 0.2rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .sobre-box, .contato-box, .viabilidade-box {
+            background: white;
+            border-radius: 2rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid #e2f0da;
+        }
+
+        .sobre-imagem {
+            width: 100%;
+            height: 260px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .info-contato i {
+            width: 32px;
+            color: var(--green-primary);
+        }
+
+        .horario {
+            background: var(--green-secondary);
+            border-radius: 24px;
+            padding: 1rem;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        footer {
+            background: #2d4130;
+            color: #cfdec4;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+            font-size: 0.85rem;
+        }
+
+        .dica-imagem {
+            font-size: 0.8rem;
+            background: #ecf7e5;
+            border-radius: 1rem;
+            padding: 0.3rem 1rem;
+            text-align: center;
+        }
+
+        @media (max-width: 760px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .hero-img {
+                height: 160px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+    // ============================================================
+    // 🎨 ÁREA DE PERSONALIZAÇÃO - ALTERE AQUI TUDO QUE QUISER!
+    // ============================================================
+    const CONFIG = {
+        // DADOS DA LOJA
+        nomeLoja: "TriceraCookies",
+        lema: "Crocância que atravessa eras",
+        email: "TriceraCookiesOFC@gmail.com",
+        telefone: "(47) 4002-8922",
+        endereco: "Rua dos Fósseis, 217 - Vila Dinossauro, Balneário Camboriú",
+        horario: "Terça a Sábado, das 8h às 18h",
+        
+        // CORES (altere os hexadecimais)
+        cores: {
+            principal: "#99CD85",
+            secundaria: "#CFE0BC",
+            escura: "#5f8b4a"
+        },
+        
+        // IMAGENS (coloque URLs reais ou mantenha os placeholders)
+        imagens: {
+            bannerHome: "https://placehold.co/1200x500/CFE0BC/3a5e2f?text=🍪+Nossos+Cookies+Jurássicos+🍪",
+            sobreLoja: "https://placehold.co/1000x400/99CD85/ffffff?text=👩‍🍳+Nossa+Cozinha+Criativa",
+            produto1: "https://placehold.co/500x400/e9f2e3/5f8b4a?text=🦕+Cookie+Simples",
+            produto2: "https://placehold.co/500x400/FFE0B5/A5652A?text=🍫+Cookie+Chocolate",
+            produto3: "https://placehold.co/500x400/F9F0D4/E3B87C?text=🦴+Glacê+Jurássico",
+            produto4: "https://placehold.co/500x400/D8E6C9/58853E?text=🥜+Amendo-Dino"
+        },
+        
+        // LISTA DE BISCOITOS (adicione, remova ou edite à vontade)
+        produtos: [
+            {
+                nome: "Cookie Dino Original",
+                descricao: "Manteiga, gotas de baunilha e formato de tricerátops. Crocância perfeita.",
+                preco: 2.00,
+                tipo: "simples",
+                imagem: null // usa a imagem do config.imagens.produto1
+            },
+            {
+                nome: "Cookie Rex de Chocolate",
+                descricao: "Cobertura de chocolate belga + granulado dino. Irresistível!",
+                preco: 5.00,
+                tipo: "confeitado",
+                imagem: null // usa produto2
+            },
+            {
+                nome: "Cookie Glacê Jurássico",
+                descricao: "Glacê colorido com estampa de pegadas. Sabor limão e baunilha.",
+                preco: 5.00,
+                tipo: "confeitado",
+                imagem: null // usa produto3
+            },
+            {
+                nome: "Cookie Amendo-Dino",
+                descricao: "Croûnch de amendoim pedaços, versão vegana opcional.",
+                preco: 2.00,
+                tipo: "simples",
+                imagem: null // usa produto4
+            }
+            // Adicione mais produtos aqui seguindo o mesmo formato
+        ],
+        
+        // TEXTO DA HISTÓRIA
+        historia: "🦕 Uma garota apaixonada por dinossauros e culinária decidiu transformar suas duas paixões em um sonho. Depois de testar várias receitas em casa, ela criou uma loja de biscoitos em formatos de dinossauros, cheia de cores e diversão. Assim nasceu uma lojinha diferente, onde cada biscoito traz um sabor delicioso e um toque da era jurássica. Hoje, nossa cozinha artesanal produz cookies que unem nostalgia e crocância, com ingredientes selecionados e muito amor. Cada mordida é uma aventura no tempo!",
+        
+        // DADOS DE VIABILIDADE
+        viabilidade: {
+            custoMinimo: 0.38,
+            custoMaximo: 0.83,
+            investimentoInicial: 4000,
+            riscoTexto: "O maior gasto não é o biscoito em si, mas sim o aluguel da loja e a conta de luz (por causa do forno).",
+            acaoGerada: "Para maximizar o lucro real, a loja deve vender mais biscoitos confeitados (R$ 5), pois o custo adicional do chocolate é pequeno, mas o preço sobe muito."
+        },
+        
+        // TEXTO DO FOOTER
+        footerTexto: "Biscoitos artesanais com alma pré-histórica"
+    };
+    
+    // ============================================================
+    // 🚀 FIM DA ÁREA DE PERSONALIZAÇÃO - NÃO MEXA DAQUI PRA BAIXO
+    // ============================================================
+    
+    // Aplicar cores dinâmicas via CSS
+    function aplicarCores() {
+        const root = document.documentElement.style;
+        root.setProperty('--green-primary', CONFIG.cores.principal);
+        root.setProperty('--green-secondary', CONFIG.cores.secundaria);
+        root.setProperty('--green-dark', CONFIG.cores.escura);
+    }
+    
+    // Renderizar o HTML completo
+    function renderizarSite() {
+        const app = document.getElementById('app');
+        
+        // Gerar HTML dos produtos dinamicamente
+        const produtosHTML = CONFIG.produtos.map((prod, index) => {
+            let imagemUrl = prod.imagem;
+            if (!imagemUrl) {
+                const imgKeys = ['produto1', 'produto2', 'produto3', 'produto4'];
+                imagemUrl = CONFIG.imagens[imgKeys[index] || 'produto1'];
+            }
+            const badgeText = prod.tipo === 'confeitado' ? '✨ Confeitado R$' + prod.preco : '🍪 Simples R$' + prod.preco;
+            return `
+                <div class="card">
+                    <div class="card-img" style="background-image: url('${imagemUrl}');">
+                        <span class="badge-img">${badgeText}</span>
+                    </div>
+                    <div class="card-content">
+                        <h3>${prod.nome}</h3>
+                        <p>${prod.descricao}</p>
+                        <div class="price">R$ ${prod.preco.toFixed(2)} <span style="font-size:0.9rem;">unidade</span></div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        const margemSimples = ((2 - 0.45) / 0.45 * 100).toFixed(0);
+        const margemConfeitado = ((5 - 0.65) / 0.65 * 100).toFixed(0);
+        
+        const htmlCompleto = `
+            <header>
+                <div class="navbar">
+                    <div class="logo-area">
+                        <div class="logo">🦕 ${CONFIG.nomeLoja} <span>🍪</span></div>
+                        <div class="lema">"${CONFIG.lema}"</div>
+                    </div>
+                    <div class="nav-links" id="navLinks">
+                        <a data-section="home" class="active">Home</a>
+                        <a data-section="produtos">Produtos / Catálogo</a>
+                        <a data-section="sobre">Sobre a loja</a>
+                        <a data-section="contato">Contato</a>
+                        <a data-section="outras">Outras + Viabilidade</a>
+                    </div>
+                </div>
+            </header>
+
+            <main class="container">
+                <!-- HOME -->
+                <div id="home" class="section active-section">
+                    <div class="hero">
+                        <h1>Biscoitos jurássicos artesanais 🦖🍪</h1>
+                        <p>${CONFIG.lema}</p>
+                        <button class="btn-cookie" id="explorarBtn">Explorar catálogo →</button>
+                        <div class="hero-img" style="background-image: url('${CONFIG.imagens.bannerHome}');"></div>
+                        <div class="dica-imagem" style="margin-top: 12px;">
+                            <i class="fas fa-camera"></i> Cookies fresquinhos saindo do forno!
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: space-between;">
+                        <div style="flex:1; min-width: 200px; background: var(--green-secondary); border-radius: 2rem; padding: 1.5rem; text-align: center;">
+                            <i class="fas fa-cookie-bite" style="font-size: 2.5rem; color:#528a3a;"></i>
+                            <h3>Biscoitos Simples</h3>
+                            <p>A partir de <strong>R$ 2,00</strong> unidade</p>
+                        </div>
+                        <div style="flex:1; min-width: 200px; background: var(--green-primary); border-radius: 2rem; padding: 1.5rem; text-align: center;">
+                            <i class="fas fa-chocolate-bar" style="font-size: 2.5rem; color:#fff2cf;"></i>
+                            <h3>Confeitados</h3>
+                            <p><strong>R$ 5,00</strong> unidade — cobertura especial!</p>
+                        </div>
+                        <div style="flex:1; min-width: 200px; background: var(--green-secondary); border-radius: 2rem; padding: 1.5rem; text-align: center;">
+                            <i class="fas fa-t-rex" style="font-size: 2.5rem;"></i>
+                            <h3>Formato Dinossauro</h3>
+                            <p>Stego, T-Rex, Triceratops e mais!</p>
+                        </div>
+                    </div>
+                    <div style="margin-top: 2rem; text-align: center; background: #fff2e0; border-radius: 3rem; padding: 1rem;">
+                        <i class="fas fa-store"></i> Atendimento presencial & delivery • ${CONFIG.horario}
+                    </div>
+                </div>
+
+                <!-- PRODUTOS -->
+                <div id="produtos" class="section">
+                    <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">🍪 Nosso catálogo</h2>
+                    <p>Biscoitos fresquinhos, feitos com carinho e formatos pré-históricos.</p>
+                    <div class="grid-produtos">
+                        ${produtosHTML}
+                    </div>
+                    <div class="sobre-box" style="background:#f5f7ef;">
+                        <p><strong>💡 Dica da chef:</strong> nossos biscoitos <strong>confeitados (R$ 5,00)</strong> têm o melhor custo-benefício. Peça um mix e ganhe brinde surpresa!</p>
+                    </div>
+                </div>
+
+                <!-- SOBRE -->
+                <div id="sobre" class="section">
+                    <div class="sobre-box">
+                        <h2><i class="fas fa-dragon"></i> A história da ${CONFIG.nomeLoja}</h2>
+                        <div class="sobre-imagem" style="background-image: url('${CONFIG.imagens.sobreLoja}');"></div>
+                        <p style="font-size:1.1rem; margin-top: 1rem;">${CONFIG.historia}</p>
+                        <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <div><i class="fas fa-leaf"></i> Ingredientes naturais</div>
+                            <div><i class="fas fa-heart"></i> Receita exclusiva</div>
+                            <div><i class="fas fa-dinosaur"></i> Forma personalizada</div>
+                        </div>
+                    </div>
+                    <div class="horario">
+                        <i class="far fa-clock"></i> Horário de atendimento: <strong>${CONFIG.horario}</strong> • Delivery e retirada.
+                    </div>
+                </div>
+
+                <!-- CONTATO -->
+                <div id="contato" class="section">
+                    <div class="contato-box">
+                        <h2><i class="fas fa-headset"></i> Entre em contato com nossa equipe jurássica</h2>
+                        <div class="info-contato" style="margin: 2rem 0; display: flex; flex-direction: column; gap: 1.2rem;">
+                            <div><i class="fas fa-envelope"></i> <strong>Email:</strong> <a href="mailto:${CONFIG.email}" style="color:#2d6a2b;">${CONFIG.email}</a></div>
+                            <div><i class="fas fa-phone-alt"></i> <strong>Telefone / WhatsApp:</strong> ${CONFIG.telefone}</div>
+                            <div><i class="fas fa-map-marker-alt"></i> <strong>Localização:</strong> ${CONFIG.endereco}</div>
+                        </div>
+                        <div style="background:#e1f0d4; border-radius: 1.5rem; padding: 1rem; text-align:center;">
+                            <i class="fas fa-image"></i> Visite nossa loja e veja os cookies decorados ao vivo!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OUTRAS + VIABILIDADE -->
+                <div id="outras" class="section">
+                    <div class="viabilidade-box">
+                        <h2><i class="fas fa-chart-line"></i> Viabilidade & Estratégia ${CONFIG.nomeLoja}</h2>
+                        <div style="background: #fbf9e8; border-radius: 1.5rem; padding: 1.5rem; margin: 1rem 0;">
+                            <p><strong>💰 Lucratividade real:</strong> A venda de biscoitos é extremamente lucrativa. O custo para fazer um biscoito varia entre <strong>R$ ${CONFIG.viabilidade.custoMinimo.toFixed(2)} e R$ ${CONFIG.viabilidade.custoMaximo.toFixed(2)}</strong>. Nosso preço de venda é <strong>R$ 2 (simples)</strong> e <strong>R$ 5 (confeitado)</strong>, garantindo margem acima de <strong>500%</strong>!</p>
+                            <p><strong>🏭 Investimento inicial:</strong> Cerca de <strong>R$ ${CONFIG.viabilidade.investimentoInicial.toFixed(2)}</strong> para adquirir forno profissional e batedeira planetária.</p>
+                            <p><strong>⚠️ Risco principal:</strong> ${CONFIG.viabilidade.riscoTexto}</p>
+                            <p><strong>📈 Ação otimizada:</strong> ${CONFIG.viabilidade.acaoGerada}</p>
+                        </div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: space-between;">
+                            <div style="flex:1; background: var(--green-secondary); border-radius: 1.5rem; padding: 1.2rem;">
+                                <h3>🍪 Preço simples</h3>
+                                <p><strong>R$ 2,00 / unidade</strong><br>Custo ~R$0,45 · Lucro ~${margemSimples}%</p>
+                            </div>
+                            <div style="flex:1; background: var(--green-primary); border-radius: 1.5rem; padding: 1.2rem;">
+                                <h3>🎨 Preço confeitado</h3>
+                                <p><strong>R$ 5,00 / unidade</strong><br>Custo ~R$0,65 · Lucro ~${margemConfeitado}%</p>
+                                <span class="badge" style="background:#fff0b5;">⭐ MAIS RECOMENDADO</span>
+                            </div>
+                            <div style="flex:1; background: #FFE8C5; border-radius: 1.5rem; padding: 1.2rem;">
+                                <h3>📦 Kits promocionais</h3>
+                                <p>6 unidades simples + 4 confeitados = R$ 28,00</p>
+                            </div>
+                        </div>
+                        <div style="margin-top: 2rem; padding: 1rem; border-left: 5px solid var(--green-primary); background:#eef5ea;">
+                            <strong>✅ Conclusão/Resumo:</strong> Negócio viável, margem altíssima. Foco em confeitados e controle de aluguel/energia. Com investimento inicial de R$ ${CONFIG.viabilidade.investimentoInicial} e preços acessíveis, o retorno financeiro é rápido.
+                        </div>
+                    </div>
+                    <div class="horario" style="margin-top: 1rem;">
+                        <i class="fas fa-donate"></i> Faça seus pedidos pelo nosso contato e ajude a gente a manter a tradição jurássica viva! 🦕🦖
+                    </div>
+                </div>
+            </main>
+
+            <footer>
+                <p>🦕 ${CONFIG.nomeLoja} • ${CONFIG.lema} • CNPJ em fase jurássica</p>
+                <p style="margin-top: 8px;">© 2025 - ${CONFIG.footerTexto} | ${CONFIG.telefone}</p>
+                <p>Email: ${CONFIG.email}</p>
+            </footer>
+        `;
+        
+        app.innerHTML = htmlCompleto;
+        
+        // Reaplicar eventos após renderizar
+        aplicarCores();
+        configurarNavegacao();
+    }
+    
+    function configurarNavegacao() {
+        const divSections = {
+            home: document.getElementById('home'),
+            produtos: document.getElementById('produtos'),
+            sobre: document.getElementById('sobre'),
+            contato: document.getElementById('contato'),
+            outras: document.getElementById('outras')
+        };
+        const navLinks = document.querySelectorAll('.nav-links a');
+        
+        function activateSection(sectionId) {
+            for (let sec in divSections) {
+                if (divSections[sec]) divSections[sec].classList.remove('active-section');
+            }
+            if (divSections[sectionId]) divSections[sectionId].classList.add('active-section');
+            navLinks.forEach(link => {
+                const linkSection = link.getAttribute('data-section');
+                if (linkSection === sectionId) link.classList.add('active');
+                else link.classList.remove('active');
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const sectionId = link.getAttribute('data-section');
+                if (sectionId && divSections[sectionId]) activateSection(sectionId);
+            });
+        });
+        
+        const explorarBtn = document.getElementById('explorarBtn');
+        if (explorarBtn) {
+            explorarBtn.addEventListener('click', () => activateSection('produtos'));
+        }
+        
+        // Ativar home por padrão
+        if (!document.querySelector('.section.active-section')) {
+            activateSection('home');
+        }
+    }
+    
+    // Inicializar o site
+    renderizarSite();
+</script>
+
+</body>
+</html>
